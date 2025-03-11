@@ -93,7 +93,7 @@ const SphereWithPoints: React.FC = () => {
 
   return (
     <Points ref={pointsRef} positions={positions.current} frustumCulled={false}>
-      <PointMaterial size={0.06} color="cyan" />
+      <PointMaterial size={0.08} color="cyan" />
     </Points>
   );
 };

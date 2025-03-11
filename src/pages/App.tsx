@@ -43,7 +43,7 @@ const AudioPrompt: React.FC<{ onSelect: (play: boolean) => void }> = ({
         justifyContent="center"
         height="100vh"
         width="100vw"
-        sx={{ backgroundColor: "#001122" }}
+        sx={{ backgroundColor: "#001B33" }}
       >
         <Typography
           variant="h5"

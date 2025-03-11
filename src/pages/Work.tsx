@@ -6,7 +6,7 @@ import { Scroll, ScrollControls, Image } from "@react-three/drei";
 import { motion } from "framer-motion";
 import { create } from "zustand";
 import { motion as motion3D } from "framer-motion-3d"; // ✅ 3Dオブジェクト用のmotion
-import ResponsiveCamera from "../features/useResponsiveCamera";
+import ResponsiveCamera from "../stores/useResponsiveCamera";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import { Typography, Button } from "@mui/material";
 import { Fluid } from "@whatisjery/react-fluid-distortion";
@@ -42,7 +42,7 @@ const Work: React.FC = () => {
   return (
     <div style={{ position: "relative", width: "100vw", height: "100vh" }}>
       <Canvas
-        style={{ height: "100vh", width: "100vw", background: "#001122" }}
+        style={{ height: "100vh", width: "100vw", background: "#001B33" }}
       >
         <ResponsiveCamera />
         <ambientLight intensity={1.5} />
@@ -81,8 +81,8 @@ const Work: React.FC = () => {
             rainbow={false}
             blend={0}
             showBackground={true}
-            backgroundColor="#001122"
-            fluidColor="#001122"
+            backgroundColor="#001B33"
+            fluidColor="#001B33"
           />
         </EffectComposer>
       </Canvas>
@@ -91,9 +91,91 @@ const Work: React.FC = () => {
       )}
       <Button
         onClick={() => navigate("/")}
-        sx={{ position: "absolute", top: 20, left: 20, color: "white" }}
+        disableRipple
+        component="span"
+        className="title-anim-box cursor-pointer"
+        sx={{
+          border: "none",
+          borderRadius: "none",
+          position: "absolute",
+          background: "transparent !important",
+          cursor: "pointer",
+          padding: "0 0 3px 0",
+          top: "20px",
+          left: "20px",
+          zIndex: 3,
+          display: "flex",
+          alignItems: "center",
+        }}
       >
-        <ArrowBackIosIcon /> MENU
+        <ArrowBackIosIcon
+          className="title-anim-p cursor-pointer"
+          sx={{
+            color: "white",
+            display: "inline-block",
+            fontSize: {
+              xs: "1.2rem",
+              sm: "1.4rem",
+              md: "1.6rem",
+              lg: "1.8rem",
+            },
+            fontFamily: "'Montserrat', 'Roboto', sans-serif",
+            textTransform: "none",
+            paddingBottom: "9px",
+            zIndex: 3,
+            "&::after": {
+              content: '""',
+              position: "absolute",
+              left: 0,
+              bottom: "2px", // 文字の下に線を引く
+              width: "100%",
+              height: "5px",
+              background: "white",
+              transform: "scaleX(0)", // 初期状態は非表示
+              transformOrigin: "right",
+              transition: "transform 0.3s ease-out", // なめらかに表示
+            },
+            "&:hover::after": {
+              transform: "scaleX(1)", // ホバー時に左から右へ表示
+              transformOrigin: "left",
+            },
+          }}
+        />
+        <Typography
+          className="title-anim-p cursor-pointer"
+          sx={{
+            color: "white",
+            display: "inline-block",
+            fontSize: {
+              xs: "1.2rem",
+              sm: "1.4rem",
+              md: "1.6rem",
+              lg: "1.8rem",
+            },
+            fontFamily: "'Montserrat', 'Roboto', sans-serif",
+            textTransform: "none",
+            paddingBottom: "10px",
+            zIndex: 3,
+            "&::after": {
+              content: '""',
+              position: "absolute",
+              left: 0,
+              bottom: "2px", // 文字の下に線を引く
+              width: "100%",
+              height: "5px",
+              background: "white",
+              transform: "scaleX(0)", // 初期状態は非表示
+              transformOrigin: "right",
+              transition: "transform 0.3s ease-out", // なめらかに表示
+            },
+            "&:hover::after": {
+              transform: "scaleX(1)", // ホバー時に左から右へ表示
+              transformOrigin: "left",
+            },
+          }}
+        >
+          MENU
+        </Typography>
       </Button>
     </div>
   );

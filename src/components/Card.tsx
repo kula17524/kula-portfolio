@@ -21,9 +21,9 @@ const Card: React.FC<CardProps> = ({
   textureUrl,
   title,
   description,
-  backgroundColor = "#001122", // 背景色を透明に変更
-  headerColor = "#001122",
-  borderColor = "#001122", // 縁の色を白に設定
+  backgroundColor = "#001B33", // 背景色を透明に変更
+  headerColor = "#001B33",
+  borderColor = "#001B33", // 縁の色を白に設定
   width = 3,
   height = 5,
   imageWidth = 2.2,
@@ -140,7 +140,7 @@ const Card: React.FC<CardProps> = ({
       {/* 説明部分 */}
       <mesh position={[0, -1.6, -0.05]}>
         <planeGeometry args={[width - 0.4, 1.5]} />
-        <meshStandardMaterial color="#001122" transparent opacity={0} />
+        <meshStandardMaterial color="#001B33" transparent opacity={0} />
       </mesh>
 
       <Text
