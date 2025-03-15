@@ -146,6 +146,7 @@ const Card: React.FC<CardProps> = ({
       <Text
         position={[0, -1.6, 0]}
         fontSize={0.15}
+        font={"./Fonts/Montserrat-VariableFont_wght.ttf"}
         color="white"
         maxWidth={width - 0.4}
         textAlign="center"

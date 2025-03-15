@@ -50,19 +50,24 @@ const Home: React.FC = () => {
           position: "absolute",
           zIndex: 3,
           userSelect: "none",
-          height: { xs: "3rem", sm: "4rem", md: "5rem", lg: "6rem" },
+          height: { xs: "2.5rem", sm: "4.5rem", md: "5.5rem", lg: "6.5rem" },
           top: "50%",
           left: "50%",
-          transform: "translate(-50%,-80%)",
+          transform: "translate(-50%,-100%)",
+          padding: 0,
+          margin: 0,
         }}
       >
         <Typography
           className="title-anim-p"
-          fontSize={{ xs: "3rem", sm: "4rem", md: "5rem", lg: "6rem" }}
+          fontSize={{ xs: "2.5rem", sm: "4.5rem", md: "5.5rem", lg: "6.5rem" }}
+          fontWeight={"bold"}
           sx={{
             color: "white",
             fontFamily: "'Montserrat', 'Roboto', sans-serif",
             userSelect: "none",
+            padding: 0,
+            margin: 0,
           }}
         >
           PORTFOLIO
@@ -74,19 +79,24 @@ const Home: React.FC = () => {
           zIndex: 3,
           position: "absolute",
           userSelect: "none",
-          height: { xs: "1.5rem", sm: "2rem", md: "2.5rem", lg: "3rem" },
           top: "50%",
           left: "50%",
-          transform: "translate(-50%,30%)",
+          transform: "translate(-50%,50%)",
+          padding: 0,
+          margin: 0,
         }}
       >
         <Typography
           className="title-anim-p"
-          fontSize={{ xs: "1.5rem", sm: "2rem", md: "2.5rem", lg: "3rem" }}
+          fontSize={{ xs: "1rem", sm: "2rem", md: "2.5rem", lg: "3rem" }}
           sx={{
             color: "white",
+            textTransform: "none",
             fontFamily: "'Montserrat', 'Roboto', sans-serif",
             userSelect: "none",
+            lineHeight: 1,
+            padding: 0,
+            margin: 0,
           }}
         >
           - China Ohkura -

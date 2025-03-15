@@ -3,6 +3,20 @@
 * {
   cursor: none !important;
 }
+/* スクロールバー全体のデザインを統一 */
+::-webkit-scrollbar {
+  width: 10px; /* スクロールバーの幅 */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 1); /* スクロールバーの色 */
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: rgba(0, 27, 51, 0); /* 背景色（#001B33 の透明バージョン） */
+  border-radius: 10px;
+}
 
 body {
   margin: 0;
