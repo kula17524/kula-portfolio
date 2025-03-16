@@ -2,9 +2,31 @@ import React from "react";
 import { useNavigate } from "react-router";
 import { Box, Typography, Button } from "@mui/material";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import { useParams } from "react-router-dom";
+import PdfViewer from "../components/PdfViewer";
 
+const projectData = {
+  nimeton: {
+    title: "Nimetön",
+    description: "にめとんですよ",
+    image: "/img/nimeton/nimeton.jpeg",
+    pdf: "none",
+  },
+  money: {
+    title: "課金",
+    description: "めにーめにーまにー",
+    image: "/img/money/title.png",
+    pdf: "money",
+  },
+};
 const Detail: React.FC = () => {
   const navigate = useNavigate();
+  const { id } = useParams<{ id: string }>();
+  const project = projectData[id as keyof typeof projectData];
+
+  if (!project) {
+    return <p>データが見つかりません</p>;
+  }
   return (
     <div>
       <Button
@@ -104,6 +126,13 @@ const Detail: React.FC = () => {
           MENU
         </Typography>
       </Button>
+
+      <Box>
+        {project.image && (
+          <img src={project.image} alt={project.title} width="100%" />
+        )}
+      </Box>
+      <Box>{project.pdf != "none" && <PdfViewer pdfUrl={project.pdf} />}</Box>
     </div>
   );
 };
