@@ -3,12 +3,12 @@ import { useNavigate } from "react-router";
 import { Box, Typography, Button } from "@mui/material";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 
-const Profile: React.FC = () => {
+const Detail: React.FC = () => {
   const navigate = useNavigate();
   return (
     <div>
       <Button
-        onClick={() => navigate("/")}
+        onClick={() => navigate("/work")}
         disableRipple
         component="span"
         className="title-anim-box cursor-pointer"
@@ -108,4 +108,4 @@ const Profile: React.FC = () => {
   );
 };
 
-export default Profile;
+export default Detail;

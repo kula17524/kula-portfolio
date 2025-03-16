@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef, useLayoutEffect } from "react";
+import React, { useState, useRef, useLayoutEffect, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Canvas, useThree, useFrame } from "@react-three/fiber";
+import { Canvas, useThree } from "@react-three/fiber";
 import { EffectComposer } from "@react-three/postprocessing";
 import { Scroll, ScrollControls, Text, Line } from "@react-three/drei";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
@@ -13,7 +13,7 @@ const OutlineCircle = () => {
     { length: 1500 },
     (_, i) => {
       const angle: number = (i / 1500) * Math.PI * 2;
-      return [Math.cos(angle) * 6, Math.sin(angle) * 6, -10]; // 半径5の円
+      return [Math.cos(angle) * 10, Math.sin(angle) * 10, -25]; // 半径5の円
     }
   );
 
@@ -37,7 +37,7 @@ const ScrollControlsWrapper = () => {
     const aspectRatio = size.width / size.height;
 
     // `pages` をスクロール範囲に応じて計算
-    return aspectRatio > 1.6 ? 9.5 : 13.3; // 1ページあたり10の高さ
+    return aspectRatio > 1.6 ? 9.7 : 13.3; // 1ページあたり10の高さ
   };
 
   // 初回レンダリング & 画面リサイズ時に `pages` を更新
@@ -66,6 +66,16 @@ const ScrollControlsWrapper = () => {
 
 const Work: React.FC = () => {
   const navigate = useNavigate();
+  const [brightness, setBrightness] = useState(0.8); // 明るさの状態
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      // 明るさを1と0.2で交互に切り替え、点滅効果を作成
+      setBrightness((prev) => (prev === 0.8 ? 0 : 0.8));
+    }, 2000); // 1秒ごとに切り替える
+
+    return () => clearInterval(interval); // コンポーネントがアンマウントされたときにクリーンアップ
+  }, []);
 
   return (
     <div
@@ -91,11 +101,11 @@ const Work: React.FC = () => {
           <OutlineCircle />
           <Text
             font="./Fonts/Lora-VariableFont_wght.ttf"
-            fontSize={3}
+            fontSize={5}
             color="white"
             anchorX="center"
             anchorY="middle"
-            position={[0, 0, -10]} // 奥に配置するためにz軸で位置を調整
+            position={[0, 0, -25]} // 奥に配置するためにz軸で位置を調整
             strokeColor="white" // 白抜き文字の線の色（黒）
             strokeWidth={0.02} // 白抜き文字の幅を調整
             strokeOpacity={0.5}
@@ -124,6 +134,20 @@ const Work: React.FC = () => {
         </EffectComposer>
       </Canvas>
 
+      <Typography
+        style={{
+          position: "absolute",
+          bottom: 20,
+          right: 20,
+          fontFamily: "'Montserrat', 'Roboto', sans-serif",
+          color: `rgba(255, 255, 255, ${brightness})`, // 明るさを変更
+          fontWeight: "normal",
+          transition: "color 1s ease-in-out", // 明るさの変化を滑らかに
+        }}
+      >
+        Click the image.
+      </Typography>
+
       <Button
         onClick={() => navigate("/")}
         disableRipple
@@ -141,6 +165,10 @@ const Work: React.FC = () => {
           zIndex: 3,
           display: "flex",
           alignItems: "center",
+          "&:active": {
+            // ボタンが押された時のスタイル
+            transform: "scale(0.95)", // ボタンを縮めるだけ
+          },
         }}
       >
         <ArrowBackIosIcon

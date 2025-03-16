@@ -2,7 +2,6 @@ import React, { useRef, useEffect, useState } from "react";
 import * as THREE from "three";
 import { useFrame, useLoader, useThree } from "@react-three/fiber";
 import { useScroll, Text } from "@react-three/drei";
-
 import { useNavigate } from "react-router-dom";
 
 // シェーダーコード（CodePen の実装に準拠）
@@ -56,6 +55,7 @@ const fragmentShader = `
 interface ImageData {
   // 画像パス
   src: string;
+  id: string;
   // 基準位置（スクロール開始時の座標、単位はワールド座標）
   x: number;
   y: number;
@@ -181,14 +181,55 @@ const ImagePlane: React.FC<ImagePlaneProps> = ({ data }) => {
     uniforms.current.uPlaneAspect.value = data.width / data.height;
     uniforms.current.uTime.value = delta * 15000;
     uniforms.current.uScrollDirection.value = smoothDirection;
+  });
+  const [currentZ, setCurrentZ] = useState(0);
+  const [targetZ, setTargetZ] = useState(0);
+  const stiffness = 0.2; // バネの強さ
+  const damping = 0.8;
 
-    const targetScale = isHovered ? 2 : 1; // ホバー時の拡大・縮小
-    meshRef.current.position.z += targetScale * 0.5; // 徐々にスケールを変更
+  useEffect(() => {
+    setAspect(size.width / size.height);
+    let velocity = 0; // 速度
+    let position = currentZ;
+    if (aspect <= breakpoint) {
+      if (size.width > 500) {
+        setTargetZ(isHovered ? -2.5 : -5);
+      } else if (size.width > 350) {
+        setTargetZ(isHovered ? -7.5 : -10);
+      } else {
+        setTargetZ(isHovered ? -12.5 : -15);
+      }
+    } else {
+      setTargetZ(isHovered ? data.z + 2.5 : data.z);
+    }
+    const springAnimation = () => {
+      // バネの力で位置を更新
+      const force = (targetZ - position) * stiffness - velocity * damping;
+      velocity += force; // 速度を更新
+      position += velocity; // 位置を更新
+
+      // 目標に近づいたらアニメーションを終了
+      if (Math.abs(targetZ - position) < 0.01 && Math.abs(velocity) < 0.01) {
+        position = targetZ;
+      }
+
+      setCurrentZ(position);
+    };
+
+    const interval = setInterval(springAnimation, 16); // 約60fpsで更新
+
+    return () => clearInterval(interval); // クリーンアップ
+  }, [isHovered, targetZ, size]);
+
+  useFrame(() => {
+    if (meshRef.current) {
+      meshRef.current.position.z = currentZ; // 位置を反映
+    }
   });
 
   // 画像クリック時にページ遷移
-  const handleClick = () => {
-    navigate("/detail"); // 例: 詳細ページに遷移
+  const handleClick = (id: string) => {
+    navigate(`/detail/${id}`); // 例: 詳細ページに遷移
   };
 
   // 角丸の四角形の形状を作成
@@ -258,7 +299,7 @@ const ImagePlane: React.FC<ImagePlaneProps> = ({ data }) => {
         ref={meshRef}
         onPointerOver={() => setIsHovered(true)} // ホバー時
         onPointerOut={() => setIsHovered(false)} // ホバーを外した時
-        onClick={handleClick} // クリック時
+        onClick={() => handleClick(data.id)} // クリック時
       >
         <planeGeometry args={[1, 1, 100, 100]} />
         <shaderMaterial
@@ -363,10 +404,11 @@ const ImagePlanes: React.FC<ImagePlanesProps> = () => {
   const imagesData: ImageData[] = [
     {
       src: "./img/nimeton/nimeton.jpeg",
+      id: "nimeton",
       x: -3.1,
       y: 1,
       narrowY: 1,
-      z: Math.random() * 3 - 1,
+      z: 3.58,
       isLeft: true,
       titleX: -0.8,
       titleY: 1.6,
@@ -382,6 +424,7 @@ const ImagePlanes: React.FC<ImagePlanesProps> = () => {
     },
     {
       src: "./img/egg/title.png",
+      id: "egg",
       x: 3.1,
       y: -4.5,
       narrowY: -6.2,
@@ -401,10 +444,11 @@ const ImagePlanes: React.FC<ImagePlanesProps> = () => {
     },
     {
       src: "./img/blumull/site.PNG",
+      id: "blumull",
       x: -3.1,
       y: -10,
       narrowY: -13,
-      z: Math.random() * 3 - 1,
+      z: 1.31,
       isLeft: true,
       titleX: -3 + 6.2 / 2,
       titleY: -9.1,
@@ -421,10 +465,11 @@ const ImagePlanes: React.FC<ImagePlanesProps> = () => {
     },
     {
       src: "./img/webdesign/matsubara.png",
+      id: "webdesign",
       x: 3.1,
       y: -14.5,
       narrowY: -19.5,
-      z: Math.random() * 3 - 1,
+      z: 0.78,
       isLeft: false,
       titleX: 0.1,
       titleY: -13.5,
@@ -441,10 +486,11 @@ const ImagePlanes: React.FC<ImagePlanesProps> = () => {
     },
     {
       src: "./img/remotesoftware/pos.png",
+      id: "software",
       x: -3.1,
       y: -20,
       narrowY: -26.5,
-      z: Math.random() * 3 - 1,
+      z: 2.58,
       isLeft: true,
       titleX: -0.2,
       titleY: -19,
@@ -461,10 +507,11 @@ const ImagePlanes: React.FC<ImagePlanesProps> = () => {
     },
     {
       src: "./img/mouse/poster.jpg",
+      id: "mouse",
       x: 3.1,
       y: -25.5,
       narrowY: -34.5,
-      z: Math.random() * 3 - 1,
+      z: 0.54,
       isLeft: false,
       titleX: 0,
       titleY: -24.5,
@@ -481,10 +528,11 @@ const ImagePlanes: React.FC<ImagePlanesProps> = () => {
     },
     {
       src: "./img/money/title.png",
+      id: "money",
       x: -3.1,
       y: -31,
       narrowY: -42.5,
-      z: Math.random() * 3 - 1,
+      z: 0.29,
       isLeft: true,
       titleX: 0,
       titleY: -30,
@@ -500,10 +548,11 @@ const ImagePlanes: React.FC<ImagePlanesProps> = () => {
     },
     {
       src: "./img/package/mikuji.png",
+      id: "package",
       x: 3.1,
       y: -36.5,
       narrowY: -50.5,
-      z: Math.random() * 3 - 1,
+      z: 3,
       isLeft: false,
       titleX: 0.2,
       titleY: -35.5,
@@ -520,10 +569,11 @@ const ImagePlanes: React.FC<ImagePlanesProps> = () => {
     },
     {
       src: "./img/gamekj/title.png",
+      id: "rhythm",
       x: -3.1,
       y: -42,
       narrowY: -58,
-      z: Math.random() * 3 - 1,
+      z: 3.88,
       isLeft: true,
       titleX: 0,
       titleY: -41,
@@ -540,10 +590,11 @@ const ImagePlanes: React.FC<ImagePlanesProps> = () => {
     },
     {
       src: "./img/seikyoapp/negative.png",
+      id: "seikyo",
       x: 3.1,
       y: -48,
       narrowY: -66,
-      z: Math.random() * 3 - 1,
+      z: 2.98,
       isLeft: false,
       titleX: 0.4,
       titleY: -47,
@@ -560,10 +611,11 @@ const ImagePlanes: React.FC<ImagePlanesProps> = () => {
     },
     {
       src: "./img/lume/title.png",
+      id: "lume",
       x: -3.1,
       y: -53.5,
       narrowY: -74,
-      z: Math.random() * 3 - 1,
+      z: 0.33,
       isLeft: true,
       titleX: 0,
       titleY: -52.7,
@@ -579,6 +631,7 @@ const ImagePlanes: React.FC<ImagePlanesProps> = () => {
     },
     {
       src: "./img/kotatsu/kotatsu1.jpg",
+      id: "kotatsu",
       x: 3.1,
       y: -58,
       narrowY: -81,
@@ -599,10 +652,11 @@ const ImagePlanes: React.FC<ImagePlanesProps> = () => {
     },
     {
       src: "./img/heater/top.png",
+      id: "heater",
       x: -3.1,
       y: -63,
       narrowY: -89,
-      z: Math.random() * 3 - 1,
+      z: 2.98,
       isLeft: true,
       titleX: 0,
       titleY: -62,
@@ -619,10 +673,11 @@ const ImagePlanes: React.FC<ImagePlanesProps> = () => {
     },
     {
       src: "./img/apart/page1.png",
+      id: "apart",
       x: 3.1,
       y: -68.5,
       narrowY: -97,
-      z: Math.random() * 3 - 1,
+      z: 3.75,
       isLeft: false,
       titleX: 0.2,
       titleY: -67.7,
@@ -639,10 +694,11 @@ const ImagePlanes: React.FC<ImagePlanesProps> = () => {
     },
     {
       src: "./img/reocom/title.png",
+      id: "reocom",
       x: -3.1,
       y: -73.5,
       narrowY: -104,
-      z: Math.random() * 3 - 1,
+      z: 1.85,
       isLeft: true,
       titleX: 0,
       titleY: -72.5,
@@ -659,10 +715,11 @@ const ImagePlanes: React.FC<ImagePlanesProps> = () => {
     },
     {
       src: "./img/nusumigui/title.png",
+      id: "nusumigui",
       x: 3.1,
       y: -78,
       narrowY: -110.5,
-      z: Math.random() * 3 - 1,
+      z: 3.41,
       isLeft: false,
       titleX: 0,
       titleY: -77.2,
@@ -679,10 +736,11 @@ const ImagePlanes: React.FC<ImagePlanesProps> = () => {
     },
     {
       src: "./img/curler/curler.png",
+      id: "curler",
       x: -3.1,
       y: -84,
       narrowY: -117.5,
-      z: Math.random() * 3 - 1,
+      z: 2.83,
       isLeft: true,
       titleX: -2.9 + 4.5 / 2,
       titleY: -83,
@@ -699,10 +757,11 @@ const ImagePlanes: React.FC<ImagePlanesProps> = () => {
     },
     {
       src: "./img/oshikey/title.JPG",
+      id: "oshikey",
       x: 3.1,
       y: -89,
       narrowY: -125.2,
-      z: Math.random() * 3 - 1,
+      z: 2,
       isLeft: false,
       titleX: 0,
       titleY: -88.2,
@@ -719,10 +778,11 @@ const ImagePlanes: React.FC<ImagePlanesProps> = () => {
     },
     {
       src: "./img/portfolio/portfolio.png",
+      id: "portfolio",
       x: -3.1,
       y: -94,
       narrowY: -132,
-      z: Math.random() * 3 - 1,
+      z: 3,
       isLeft: true,
       titleX: 0,
       titleY: -93.5,

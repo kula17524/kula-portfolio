@@ -11,6 +11,7 @@ import Home from "./Home";
 import { useBgm } from "../stores/BgmContext";
 import Profile from "./Profile";
 import Work from "./Work";
+import Detail from "./Detail";
 import { Button, Stack, Box, Typography } from "@mui/material";
 import VolumeUpIcon from "@mui/icons-material/VolumeUp";
 import VolumeOffIcon from "@mui/icons-material/VolumeOff";
@@ -157,6 +158,8 @@ const AppContent: React.FC = () => {
             <Route path="/" element={<Home />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/work" element={<Work />} />
+            <Route path="/detail/:id" element={<Detail />} />
+            <Route path="*" element={<Home />} />
           </Routes>
         </motion.div>
       )}
