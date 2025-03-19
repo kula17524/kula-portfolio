@@ -1,73 +1,120 @@
-import React from "react";
+import React, { useState, useRef, useLayoutEffect, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Canvas } from "@react-three/fiber";
+import { Canvas, useThree } from "@react-three/fiber";
 import { EffectComposer } from "@react-three/postprocessing";
-import { Scroll, ScrollControls, Image } from "@react-three/drei";
-import { motion } from "framer-motion";
-import { create } from "zustand";
-import { motion as motion3D } from "framer-motion-3d"; // ✅ 3Dオブジェクト用のmotion
-import ResponsiveCamera from "../features/useResponsiveCamera";
+import { Scroll, ScrollControls, Text, Line } from "@react-three/drei";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import { Typography, Button } from "@mui/material";
 import { Fluid } from "@whatisjery/react-fluid-distortion";
+import ShaderCanvas from "../components/ShaderCanvas";
 
-// Itemの型定義
-type ItemType = {
-  image: string;
-  title: string;
+const OutlineCircle = () => {
+  const points: [number, number, number][] = Array.from(
+    { length: 1500 },
+    (_, i) => {
+      const angle: number = (i / 1500) * Math.PI * 2;
+      return [Math.cos(angle) * 10, Math.sin(angle) * 10, -25]; // 半径5の円
+    }
+  );
+
+  return (
+    <Line
+      points={points} // 円の点を指定
+      color="white" // 枠線の色
+      lineWidth={0.5} // 枠線の太さ
+      opacity={0.5}
+    />
+  );
 };
 
-// Zustandストアの型定義
-type StoreType = {
-  selectedItem: ItemType | null;
-  setSelectedItem: (item: ItemType | null) => void;
+const ScrollControlsWrapper = () => {
+  const { size } = useThree();
+  const [pages, setPages] = useState(1); // ステートでページ数を管理
+  const prevPages = useRef(pages);
+
+  // `ShaderCanvas` の全 `ImagePlane` の y 座標を取得
+  const calculatePages = () => {
+    const aspectRatio = size.width / size.height;
+
+    // `pages` をスクロール範囲に応じて計算
+    return aspectRatio > 1.6 ? 9.7 : 13.3; // 1ページあたり10の高さ
+  };
+
+  // 初回レンダリング & 画面リサイズ時に `pages` を更新
+  useLayoutEffect(() => {
+    const updatePages = () => {
+      const newPages = calculatePages();
+      if (newPages !== prevPages.current) {
+        setPages(newPages);
+        prevPages.current = newPages;
+      }
+    };
+
+    updatePages(); // 初回設定
+    window.addEventListener("resize", updatePages); // リサイズ時に更新
+    return () => window.removeEventListener("resize", updatePages); // クリーンアップ
+  }, [size]);
+
+  return (
+    <ScrollControls damping={0.2} pages={pages}>
+      <Scroll>
+        <ShaderCanvas />
+      </Scroll>
+    </ScrollControls>
+  );
 };
-
-// Zustandストア作成
-const useStore = create<StoreType>((set) => ({
-  selectedItem: null,
-  setSelectedItem: (item) => set({ selectedItem: item }),
-}));
-
-// アイテムリスト
-const items: ItemType[] = [
-  { image: "/img/lume.png", title: "Item 1" },
-  { image: "/img/lume2.png", title: "Item 2" },
-];
 
 const Work: React.FC = () => {
   const navigate = useNavigate();
-  const { selectedItem, setSelectedItem } = useStore();
+  const [brightness, setBrightness] = useState(0.8); // 明るさの状態
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      // 明るさを1と0.2で交互に切り替え、点滅効果を作成
+      setBrightness((prev) => (prev === 0.8 ? 0 : 0.8));
+    }, 2000); // 1秒ごとに切り替える
+
+    return () => clearInterval(interval); // コンポーネントがアンマウントされたときにクリーンアップ
+  }, []);
 
   return (
-    <div style={{ position: "relative", width: "100vw", height: "100vh" }}>
+    <div
+      style={{
+        position: "relative",
+        width: "100vw",
+        height: "100vh",
+        overflow: "hidden",
+      }}
+    >
       <Canvas
-        style={{ height: "100vh", width: "100vw", background: "#001122" }}
+        style={{
+          height: "100vh",
+          width: "100vw",
+          background: "#001B33",
+          overflow: "hidden",
+        }}
+        camera={{ position: [0, 0, 20], fov: 30 }}
       >
-        <ResponsiveCamera />
-        <ambientLight intensity={1.5} />
-        <directionalLight position={[0, 2, 5]} intensity={1.5} />
+        <ambientLight intensity={1} />
+        <directionalLight position={[0, 2, 5]} intensity={0.5} />
         <EffectComposer>
-          <ScrollControls pages={3} damping={0.2}>
-            <Scroll>
-              {items.map((item, index) => (
-                <motion3D.group
-                  key={index}
-                  initial={{ opacity: 0, y: -6 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1, duration: 0.5 }}
-                  position={[
-                    ((index % 3) - 1) * 2.7,
-                    4 - Math.floor(index / 3),
-                    0,
-                  ]}
-                  onClick={() => setSelectedItem(item)}
-                >
-                  <Image url={item.image} scale={[2.5, 3]} />
-                </motion3D.group>
-              ))}
-            </Scroll>
-          </ScrollControls>
+          <OutlineCircle />
+          <Text
+            font="./Fonts/Lora-VariableFont_wght.ttf"
+            fontSize={5}
+            color="white"
+            anchorX="center"
+            anchorY="middle"
+            position={[0, 0, -25]} // 奥に配置するためにz軸で位置を調整
+            strokeColor="white" // 白抜き文字の線の色（黒）
+            strokeWidth={0.02} // 白抜き文字の幅を調整
+            strokeOpacity={0.5}
+            maxWidth={200} // 文字が長くなり過ぎないようにする
+            fillOpacity={0}
+          >
+            WORK
+          </Text>
+          <ScrollControlsWrapper />
           <Fluid
             radius={0.03}
             curl={7}
@@ -81,64 +128,119 @@ const Work: React.FC = () => {
             rainbow={false}
             blend={0}
             showBackground={true}
-            backgroundColor="#001122"
-            fluidColor="#001122"
+            backgroundColor="#001B33"
+            fluidColor="#001B33"
           />
         </EffectComposer>
       </Canvas>
-      {selectedItem && (
-        <DetailView item={selectedItem} onBack={() => setSelectedItem(null)} />
-      )}
+
+      <Typography
+        style={{
+          position: "absolute",
+          bottom: 20,
+          right: 20,
+          fontFamily: "'Montserrat', 'Roboto', sans-serif",
+          color: `rgba(255, 255, 255, ${brightness})`, // 明るさを変更
+          fontWeight: "normal",
+          transition: "color 1s ease-in-out", // 明るさの変化を滑らかに
+        }}
+      >
+        Click the image.
+      </Typography>
+
       <Button
         onClick={() => navigate("/")}
-        sx={{ position: "absolute", top: 20, left: 20, color: "white" }}
+        disableRipple
+        component="span"
+        className="title-anim-box cursor-pointer"
+        sx={{
+          border: "none",
+          borderRadius: "none",
+          position: "absolute",
+          background: "transparent !important",
+          cursor: "pointer",
+          padding: "0 0 3px 0",
+          top: "20px",
+          left: "20px",
+          zIndex: 3,
+          display: "flex",
+          alignItems: "center",
+          "&:active": {
+            // ボタンが押された時のスタイル
+            transform: "scale(0.95)", // ボタンを縮めるだけ
+          },
+        }}
       >
-        <ArrowBackIosIcon /> MENU
+        <ArrowBackIosIcon
+          className="title-anim-p cursor-pointer"
+          sx={{
+            color: "white",
+            display: "inline-block",
+            fontSize: {
+              xs: "1.2rem",
+              sm: "1.4rem",
+              md: "1.6rem",
+              lg: "1.8rem",
+            },
+            fontFamily: "'Montserrat', 'Roboto', sans-serif",
+            textTransform: "none",
+            paddingBottom: "9px",
+            zIndex: 3,
+            "&::after": {
+              content: '""',
+              position: "absolute",
+              left: 0,
+              bottom: "2px", // 文字の下に線を引く
+              width: "100%",
+              height: "5px",
+              background: "white",
+              transform: "scaleX(0)", // 初期状態は非表示
+              transformOrigin: "right",
+              transition: "transform 0.3s ease-out", // なめらかに表示
+            },
+            "&:hover::after": {
+              transform: "scaleX(1)", // ホバー時に左から右へ表示
+              transformOrigin: "left",
+            },
+          }}
+        />
+        <Typography
+          className="title-anim-p cursor-pointer"
+          sx={{
+            color: "white",
+            display: "inline-block",
+            fontSize: {
+              xs: "1.2rem",
+              sm: "1.4rem",
+              md: "1.6rem",
+              lg: "1.8rem",
+            },
+            fontFamily: "'Montserrat', 'Roboto', sans-serif",
+            textTransform: "none",
+            paddingBottom: "10px",
+            zIndex: 3,
+            "&::after": {
+              content: '""',
+              position: "absolute",
+              left: 0,
+              bottom: "2px", // 文字の下に線を引く
+              width: "100%",
+              height: "5px",
+              background: "white",
+              transform: "scaleX(0)", // 初期状態は非表示
+              transformOrigin: "right",
+              transition: "transform 0.3s ease-out", // なめらかに表示
+            },
+            "&:hover::after": {
+              transform: "scaleX(1)", // ホバー時に左から右へ表示
+              transformOrigin: "left",
+            },
+          }}
+        >
+          MENU
+        </Typography>
       </Button>
     </div>
-  );
-};
-
-// DetailViewの型定義
-type DetailViewProps = {
-  item: ItemType;
-  onBack: () => void;
-};
-
-const DetailView: React.FC<DetailViewProps> = ({ item, onBack }) => {
-  return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.5 }}
-      style={{
-        position: "absolute",
-        top: 0,
-        left: 0,
-        width: "100vw",
-        height: "100vh",
-        background: "rgba(0, 0, 0, 0.8)",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-      <motion.img
-        src={item.image}
-        initial={{ scale: 0.5 }}
-        animate={{ scale: 1 }}
-        transition={{ duration: 0.5 }}
-        style={{ width: "50%", borderRadius: "10px" }}
-      />
-      <Typography variant="h4" color="white" mt={2}>
-        {item.title}
-      </Typography>
-      <Button onClick={onBack} sx={{ color: "white", mt: 2 }}>
-        <ArrowBackIosIcon /> BACK
-      </Button>
-    </motion.div>
   );
 };
 

@@ -13,7 +13,7 @@ const BloomEffect: React.FC = () => {
   const { scene, gl, size, camera } = useThree();
 
   useEffect(() => {
-    scene.background = new THREE.Color("#001122");
+    scene.background = new THREE.Color("#001B33");
     gl.setClearColor(0x001122, 0);
     const renderPass = new RenderPass(scene, camera);
     const bloomPass = new UnrealBloomPass(

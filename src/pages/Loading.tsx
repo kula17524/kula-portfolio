@@ -15,7 +15,7 @@ const styles = {
     justifyContent: "center",
     alignItems: "center",
     height: "100vh",
-    backgroundColor: "#001122",
+    backgroundColor: "#001B33",
   } as React.CSSProperties,
 };
 

@@ -17,5 +17,5 @@
     "jsx": "react-jsx",
     "types": ["react", "react-dom"]
   },
-  "include": ["src", "index.tsx"]
+  "include": ["src", "index.tsx", "src/util/pdfjs-dist.d.ts"]
 }

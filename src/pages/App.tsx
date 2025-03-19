@@ -11,6 +11,7 @@ import Home from "./Home";
 import { useBgm } from "../stores/BgmContext";
 import Profile from "./Profile";
 import Work from "./Work";
+import Detail from "./Detail";
 import { Button, Stack, Box, Typography } from "@mui/material";
 import VolumeUpIcon from "@mui/icons-material/VolumeUp";
 import VolumeOffIcon from "@mui/icons-material/VolumeOff";
@@ -43,7 +44,7 @@ const AudioPrompt: React.FC<{ onSelect: (play: boolean) => void }> = ({
         justifyContent="center"
         height="100vh"
         width="100vw"
-        sx={{ backgroundColor: "#001122" }}
+        sx={{ backgroundColor: "#001B33" }}
       >
         <Typography
           variant="h5"
@@ -157,6 +158,8 @@ const AppContent: React.FC = () => {
             <Route path="/" element={<Home />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/work" element={<Work />} />
+            <Route path="/:id" element={<Detail />} />
+            <Route path="*" element={<Home />} />
           </Routes>
         </motion.div>
       )}
