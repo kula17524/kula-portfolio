@@ -229,7 +229,7 @@ const ImagePlane: React.FC<ImagePlaneProps> = ({ data }) => {
 
   // 画像クリック時にページ遷移
   const handleClick = (id: string) => {
-    navigate(`/detail/${id}`); // 例: 詳細ページに遷移
+    navigate(`/${id}`); // 例: 詳細ページに遷移
   };
 
   // 角丸の四角形の形状を作成

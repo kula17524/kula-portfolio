@@ -1,13 +1,15 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 import "react-pdf/dist/esm/Page/TextLayer.css";
 import { Button, Card, CardContent, Typography } from "@mui/material";
-import money from "../../public/img/money/file.pdf";
-import gamekj from "../../public/img/gamekj/gamekj.pdf";
-import heater_report from "../../public/img/heater/report.pdf";
-import heater_concept from "../../public/img/heater/concept.pdf";
-import seikyo from "../../public/img/seikyoapp/review.pdf";
+import money from "../pdf/money.pdf";
+import gamekj from "../pdf/gamekj.pdf";
+import heater_report from "../pdf/heater_report.pdf";
+import heater_concept from "../pdf/heater_concept.pdf";
+import seikyo from "../pdf/review.pdf";
+import reocom_plan from "../pdf/reocom_plan.pdf";
+import reocom_guide from "../pdf/reocom_guide.pdf";
 import { keyframes } from "@emotion/react";
 import "../styles/index.css";
 
@@ -29,7 +31,8 @@ const PdfViewer: React.FC<{ pdfUrl: string }> = ({ pdfUrl }) => {
   const [numPages, setNumPages] = useState<number | null>(null);
   const [pageNumber, setPageNumber] = useState(1);
   const [file, setFile] = useState<string | null>(null);
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth * 0.7);
+  const pdfContainerRef = useRef<HTMLDivElement>(null);
 
   // PDF の読み込み完了時の処理
   const onDocumentLoadSuccess = ({ numPages }: { numPages: number }) => {
@@ -46,7 +49,9 @@ const PdfViewer: React.FC<{ pdfUrl: string }> = ({ pdfUrl }) => {
   );
 
   useEffect(() => {
-    const handleResize = () => setWindowWidth(window.innerWidth);
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth * 0.7);
+    };
 
     window.addEventListener("resize", handleResize);
 
@@ -71,6 +76,12 @@ const PdfViewer: React.FC<{ pdfUrl: string }> = ({ pdfUrl }) => {
       case "seikyo":
         setFile(seikyo);
         break;
+      case "reocom_plan":
+        setFile(reocom_plan);
+        break;
+      case "reocom_guide":
+        setFile(reocom_guide);
+        break;
       default:
         setFile(null);
         break;
@@ -79,6 +90,7 @@ const PdfViewer: React.FC<{ pdfUrl: string }> = ({ pdfUrl }) => {
 
   return (
     <Card
+      ref={pdfContainerRef}
       sx={{
         display: "flex",
         justifyContent: "center",
@@ -98,7 +110,7 @@ const PdfViewer: React.FC<{ pdfUrl: string }> = ({ pdfUrl }) => {
         >
           <Page
             pageNumber={pageNumber}
-            width={windowWidth * 0.7}
+            width={windowWidth}
             className="pdf-page"
           />
         </Document>
@@ -129,6 +141,11 @@ const PdfViewer: React.FC<{ pdfUrl: string }> = ({ pdfUrl }) => {
               transition: "all 0.3s ease-in-out",
               "&:hover, &:focus": {
                 animation: `${igniteBorder} 0.3s linear forwards`,
+              },
+              "&.Mui-disabled": {
+                color: "lightgray", // 文字色を変更
+                borderColor: "lightgray", // 枠線の色を変更
+                opacity: 0.5, // 透明度を調整（好みに応じて）
               },
             }}
           >
@@ -162,6 +179,11 @@ const PdfViewer: React.FC<{ pdfUrl: string }> = ({ pdfUrl }) => {
               transition: "all 0.3s ease-in-out",
               "&:hover, &:focus": {
                 animation: `${igniteBorder} 0.3s linear forwards`,
+              },
+              "&.Mui-disabled": {
+                color: "lightgray", // 文字色を変更
+                borderColor: "lightgray", // 枠線の色を変更
+                opacity: 0.5, // 透明度を調整（好みに応じて）
               },
             }}
           >

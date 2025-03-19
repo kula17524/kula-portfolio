@@ -158,7 +158,7 @@ const AppContent: React.FC = () => {
             <Route path="/" element={<Home />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/work" element={<Work />} />
-            <Route path="/detail/:id" element={<Detail />} />
+            <Route path="/:id" element={<Detail />} />
             <Route path="*" element={<Home />} />
           </Routes>
         </motion.div>
