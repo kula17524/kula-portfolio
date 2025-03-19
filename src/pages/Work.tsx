@@ -37,7 +37,7 @@ const ScrollControlsWrapper = () => {
     const aspectRatio = size.width / size.height;
 
     // `pages` をスクロール範囲に応じて計算
-    return aspectRatio > 1.6 ? 9.7 : 13.3; // 1ページあたり10の高さ
+    return aspectRatio > 1.6 ? 10.1 : 13.8; // 1ページあたり10の高さ
   };
 
   // 初回レンダリング & 画面リサイズ時に `pages` を更新
