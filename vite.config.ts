@@ -8,6 +8,7 @@ export default defineConfig({
   },
   build: {
     outDir: "build", // ビルドの出力先ディレクトリ
+    chunkSizeWarningLimit: 1600,
   },
   plugins: [react()],
 });
