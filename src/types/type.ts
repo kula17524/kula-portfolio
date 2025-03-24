@@ -532,7 +532,7 @@ export const projectData = {
     title: "Oshikey",
     thumbnail: "/img/oshikey/title.JPG",
     genre: { program: true, design: true, plan: true },
-    date: "2024年2月～現在",
+    date: "2024年2月～2025年3月",
     period: "1年以上",
     member: "2人",
     tasks: `企画…全般

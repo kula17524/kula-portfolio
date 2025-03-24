@@ -185,7 +185,7 @@ const Profile: React.FC = () => {
           }}
         >
           <img
-            src={"./img/profile/prof.JPG"}
+            src={"./img/profile/prof.png"}
             alt={"プロフィール画像"}
             style={{
               width: "min(60vw, 60vh)", // 画面の小さい方に合わせる

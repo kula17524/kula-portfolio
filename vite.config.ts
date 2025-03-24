@@ -7,8 +7,8 @@ export default defineConfig({
     port: 3000, // ここでポート番号を指定します
   },
   build: {
-    outDir: "build", // ビルドの出力先ディレクトリ
-    chunkSizeWarningLimit: 1600,
+    outDir: "dist", // ビルドの出力先ディレクトリ
+    chunkSizeWarningLimit: 50000,
   },
   plugins: [react()],
 });

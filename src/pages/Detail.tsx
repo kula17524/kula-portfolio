@@ -416,9 +416,9 @@ const Detail: React.FC = () => {
                 gap={0.1}
                 alignItems="flex-start"
               >
-                {project.award1}
+                {project.award1 != "none" && project.award1}
                 {project.award2 != "none" && "、"}
-                {project.award2}
+                {project.award2 != "none" && project.award2}
               </Typography>
             </>
           )}
