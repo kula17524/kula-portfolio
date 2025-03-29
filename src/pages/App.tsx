@@ -42,8 +42,8 @@ const AudioPrompt: React.FC<{ onSelect: (play: boolean) => void }> = ({
         flexDirection="column"
         alignItems="center"
         justifyContent="center"
-        height="100vh"
-        width="100vw"
+        height="100dvh"
+        width="100dvw"
         sx={{ backgroundColor: "#001B33" }}
       >
         <Typography

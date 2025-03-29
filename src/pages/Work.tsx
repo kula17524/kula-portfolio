@@ -81,15 +81,15 @@ const Work: React.FC = () => {
     <div
       style={{
         position: "relative",
-        width: "100vw",
-        height: "100vh",
+        width: "100dvw",
+        height: "100dvh",
         overflow: "hidden",
       }}
     >
       <Canvas
         style={{
-          height: "100vh",
-          width: "100vw",
+          height: "100dvh",
+          width: "100dvw",
           background: "#001B33",
           overflow: "hidden",
         }}

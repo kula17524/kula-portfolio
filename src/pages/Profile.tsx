@@ -43,8 +43,8 @@ const Profile: React.FC = () => {
     <div>
       <Canvas
         style={{
-          height: "100vh",
-          width: "100vw",
+          height: "100dvh",
+          width: "100dvw",
           background: "#001B33",
           overflow: "hidden",
           position: "fixed",
@@ -167,8 +167,8 @@ const Profile: React.FC = () => {
       </Button>
       <div
         style={{
-          height: "100vh",
-          width: "100vw",
+          height: "100dvh",
+          width: "100dvw",
           overflowY: "auto",
           overflowX: "hidden",
         }}
@@ -188,8 +188,8 @@ const Profile: React.FC = () => {
             src={"./img/profile/prof.png"}
             alt={"プロフィール画像"}
             style={{
-              width: "min(60vw, 60vh)", // 画面の小さい方に合わせる
-              height: "min(60vw, 60vh)", // 正方形にする
+              width: "min(60dvw, 60dvh)", // 画面の小さい方に合わせる
+              height: "min(60dvw, 60dvh)", // 正方形にする
               objectFit: "cover",
               margin: "auto",
               display: "block",

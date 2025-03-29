@@ -8,7 +8,6 @@ import { Fluid } from "@whatisjery/react-fluid-distortion";
 import { EffectComposer } from "@react-three/postprocessing";
 import FloatingBubbles from "../components/FloatingBubbles";
 import ResponsiveCamera from "../stores/useResponsiveCamera";
-import CloseIcon from "@mui/icons-material/Close";
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
@@ -19,8 +18,8 @@ const Home: React.FC = () => {
         <Canvas
           key={Date.now()}
           style={{
-            height: "100vh",
-            width: "100vw",
+            height: "100dvh",
+            width: "100dvw",
             zIndex: 2,
             top: 0,
             left: 0,
@@ -116,10 +115,10 @@ const Home: React.FC = () => {
           cursor: "pointer",
           padding: "0 0 3px 0",
           top: {
-            xs: "calc(100vh - 60px - 3rem)",
-            sm: "calc(100vh - 60px - 4rem)",
-            md: "calc(100vh - 60px - 5rem)",
-            lg: "calc(100vh - 60px - 6rem)",
+            xs: "calc(100dvh - 60px - 3rem)",
+            sm: "calc(100dvh - 60px - 4rem)",
+            md: "calc(100dvh - 60px - 5rem)",
+            lg: "calc(100dvh - 60px - 6rem)",
           },
           left: "20px",
           zIndex: 3,
@@ -172,10 +171,10 @@ const Home: React.FC = () => {
           cursor: "pointer",
           padding: "0 0 3px 0",
           top: {
-            xs: "calc(100vh - 30px - 2rem)",
-            sm: "calc(100vh - 30px - 2.5rem)",
-            md: "calc(100vh - 30px - 3rem)",
-            lg: "calc(100vh - 30px - 3.5rem)",
+            xs: "calc(100dvh - 30px - 2rem)",
+            sm: "calc(100dvh - 30px - 2.5rem)",
+            md: "calc(100dvh - 30px - 3rem)",
+            lg: "calc(100dvh - 30px - 3.5rem)",
           },
           left: "20px",
           zIndex: 3,
@@ -225,7 +224,7 @@ const Home: React.FC = () => {
         sx={{
           zIndex: 3,
           position: "absolute",
-          top: "calc(100vh - 50px)",
+          top: "calc(100dvh - 50px)",
           userSelect: "none",
           right: "10px",
         }}

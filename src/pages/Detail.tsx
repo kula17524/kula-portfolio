@@ -78,10 +78,10 @@ const Detail: React.FC = () => {
           cursor: "pointer",
           padding: "0 0 3px 0",
           top: {
-            xs: "calc(100vh - 20px - 1.2rem)",
-            sm: "calc(100vh - 20px - 1.5rem)",
-            md: "calc(100vh - 20px - 1.8rem)",
-            lg: "calc(100vh - 20px - 2.1rem)",
+            xs: "calc(100dvh - 20px - 1.2rem)",
+            sm: "calc(100dvh - 20px - 1.5rem)",
+            md: "calc(100dvh - 20px - 1.8rem)",
+            lg: "calc(100dvh - 20px - 2.1rem)",
           },
           left: "20px",
           zIndex: 3,
@@ -165,8 +165,8 @@ const Detail: React.FC = () => {
 
       <div
         style={{
-          height: "100vh",
-          width: "100vw",
+          height: "100dvh",
+          width: "100dvw",
           overflowY: "auto",
           overflowX: "hidden",
         }}
@@ -189,8 +189,8 @@ const Detail: React.FC = () => {
               style={{
                 width: "100%",
                 height: "100%",
-                maxWidth: "100vw",
-                maxHeight: "100vh",
+                maxWidth: "100dvw",
+                maxHeight: "100dvh",
                 objectFit: "contain",
                 margin: "auto",
                 display: "block",
